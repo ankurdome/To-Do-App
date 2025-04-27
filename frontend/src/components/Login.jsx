@@ -2,10 +2,14 @@ import React, { useState, useContext } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import axios from "../Axios/axios.js"
 import TokenContext from '../context/TokenContext.js';
+import EmailIcon from '@mui/icons-material/Email';
+import LockIcon from '@mui/icons-material/Lock';
+
 function Login() {
     const [formData, setFormData] = useState({});
     const { userToken, tokenDispatch, userDispatch } = useContext(TokenContext);
     const [error, setError] = useState();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -23,71 +27,94 @@ function Login() {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value })
     }
+
     return (
-        <div>
+        <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
             {userToken && <Navigate to="/" />}
-            <section className="login-container">
-                <div className="px-6 h-full text-gray-800">
-                    <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
-                        <div className="grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
-                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" className="w-full" alt="Sample" />
-                        </div>
-                        <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
-                            <form method='post' onSubmit={handleSubmit}>
-                                <div>
-                                    {error && (
-                                        <div className="text-center border-2 border-green-600 p-2 mb-2 rounded-md bg-red-200 shadow-2xl">
-                                            {error.message}
-                                        </div>
-                                    )
-                                    }
-                                </div>
-                                {/* Email input */}
-                                <div className="mb-6">
-                                    <input
-                                        type="text"
-                                        name='email'
-                                        onChange={handleChange}
-                                        className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                        id="emailInput"
-                                        placeholder="Email address" />
-                                </div>
-                                {/* Password input */}
-                                <div className="mb-6">
-                                    <input
-                                        type="password"
-                                        name='password'
-                                        onChange={handleChange}
-                                        className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                        id="passInput"
-                                        placeholder="Password" />
-                                </div>
-                                <div className="flex justify-between items-center mb-6">
-                                    <Link
-                                        to={"/forgotPassword"}
-                                    >Forgot Password?</Link>
-                                </div>
-                                <div className="text-center lg:text-left">
-                                    <button
-                                        type="submit"
-                                        onClick={handleSubmit}
-                                        className="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">
-                                        Login
-                                    </button>
-                                    <p className="text-sm font-semibold mt-2 pt-1 mb-0">
-                                        Don't have an account?
-                                        <Link
-                                            to={"/register"}
-                                            className="text-red-600 hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out ml-5"
-                                        >Register</Link>
-                                    </p>
-                                </div>
-                            </form>
+            <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-2xl">
+                <div>
+                    <img
+                        className="mx-auto h-48 w-auto"
+                        src="https://illustrations.popsy.co/purple/work-from-home.svg"
+                        alt="Task Master"
+                    />
+                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                        Welcome back
+                    </h2>
+                    <p className="mt-2 text-center text-sm text-gray-600">
+                        Let's get productive together
+                    </p>
+                </div>
+
+                {error && (
+                    <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-md">
+                        <div className="flex">
+                            <div className="ml-3">
+                                <p className="text-sm text-red-700">
+                                    {error.message}
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                )}
 
+                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+                    <div className="rounded-md shadow-sm space-y-4">
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <EmailIcon className="text-gray-400" />
+                            </div>
+                            <input
+                                type="email"
+                                name="email"
+                                required
+                                className="appearance-none relative block w-full pl-10 pr-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                placeholder="Email address"
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <LockIcon className="text-gray-400" />
+                            </div>
+                            <input
+                                type="password"
+                                name="password"
+                                required
+                                className="appearance-none relative block w-full pl-10 pr-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                placeholder="Password"
+                                onChange={handleChange}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                        <div className="text-sm">
+                            <Link to="/forgotPassword" className="font-medium text-indigo-600 hover:text-indigo-500">
+                                Forgot your password?
+                            </Link>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button
+                            type="submit"
+                            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 ease-in-out"
+                        >
+                            Sign in
+                        </button>
+                    </div>
+
+                    <div className="text-center">
+                        <p className="text-sm text-gray-600">
+                            Don't have an account?{' '}
+                            <Link to="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
+                                Sign up
+                            </Link>
+                        </p>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }

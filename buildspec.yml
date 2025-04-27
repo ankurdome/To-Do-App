@@ -12,6 +12,10 @@ phases:
       # Install frontend dependencies
       - cd ../frontend # Assuming your frontend is in a 'frontend' folder
       - npm install
+      # Install specific UI dependencies
+      - npm install @mui/material @emotion/react @emotion/styled
+      - npm install @mui/icons-material
+      - npm install @tailwindcss/forms
   build:
     commands:
       - echo Building React frontend...

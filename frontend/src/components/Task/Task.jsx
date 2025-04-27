@@ -4,13 +4,14 @@ import "./task.css";
 import { useContext } from 'react';
 import TaskContext from '../../context/TaskContext';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+
 function Task({ task, id }) {
     const { dispatch } = useContext(TaskContext);
 
     const handleRemove = (e) => {
         e.preventDefault();
-        
-
         dispatch({
             type: "REMOVE_TASK",
             id
@@ -23,30 +24,39 @@ function Task({ task, id }) {
             id
         })
     }
+
     return (
-        <div className='bg-slate-300 py-4 rounded-lg shadow-md flex items-center justify-center gap-2 mb-3'>
-            <div className="mark-done">
-                <input type="checkbox" className="checkbox" onChange={handleMarkDone} checked={task.completed} />
-            </div>
-            <div className="task-info text-slate-900 text-sm w-10/12">
-                <h4 className="task-title text-lg capitalize">{task.title}</h4>
-                <p className="task-description">{task.description}</p>
-                <div className=' italic opacity-60'>
-                    {
-                        task?.createdAt ? (
-                            <p>{moment(task.createdAt).fromNow()}</p>
-                        ) : (
-                            <p>just now</p>
-                        )
-                    }
+        <div className={`bg-white rounded-xl shadow-lg p-4 mb-4 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${task.completed ? 'border-l-4 border-green-500' : 'border-l-4 border-blue-500'}`}>
+            <div className="flex items-center gap-4">
+                <button 
+                    onClick={handleMarkDone}
+                    className="flex-shrink-0 focus:outline-none"
+                >
+                    {task.completed ? (
+                        <CheckCircleIcon className="text-green-500 hover:text-green-600 transition-colors" />
+                    ) : (
+                        <RadioButtonUncheckedIcon className="text-blue-500 hover:text-blue-600 transition-colors" />
+                    )}
+                </button>
+                
+                <div className="flex-grow">
+                    <h4 className={`text-lg font-medium capitalize mb-1 ${task.completed ? 'text-gray-500 line-through' : 'text-gray-800'}`}>
+                        {task.title}
+                    </h4>
+                    <p className={`text-sm mb-2 ${task.completed ? 'text-gray-400' : 'text-gray-600'}`}>
+                        {task.description}
+                    </p>
+                    <div className="text-xs text-gray-400 italic">
+                        {task?.createdAt ? moment(task.createdAt).fromNow() : 'just now'}
+                    </div>
                 </div>
-            </div>
-            <div className="remove-task text-sm text-white">
-                <DeleteIcon
-                    style={{ fontSize: 30, cursor: "pointer" }}
-                    size="large"
+
+                <button
                     onClick={handleRemove}
-                    className="remove-task-btn bg-blue-700 rounded-full border-2 shadow-2xl border-white p-1" />
+                    className="flex-shrink-0 p-2 rounded-full hover:bg-red-50 transition-colors group focus:outline-none"
+                >
+                    <DeleteIcon className="text-red-400 group-hover:text-red-500 transition-colors" />
+                </button>
             </div>
         </div>
     );

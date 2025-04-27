@@ -1,50 +1,101 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-body{
-  background-color: rgb(188, 214, 214);
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   font-family: 'Poppins', sans-serif;
+  color: #2d3748;
+  min-height: 100vh;
 }
-/* customize scroll bar */
+
+/* Customize scroll bar */
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 255, 0.705);
+  background: rgba(241, 241, 241, 0.1);
   border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-.active, .logout{
-  color: white;
-  background-color: rgb(58, 58, 197);
-  font-weight: bolder;
-  padding: 5px 10px;
-  border-radius: 50px;
-  box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.5);
-}
-task-container{
-  height: 90vh;
-  background-color: whitesmoke;
 }
 
-.addTask{
-  height: 10vh;
-  background-color: transparent;
-  padding: 10px;
-}
-.outlet{
-  height:80vh;
-  background-color: whitesmoke;
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 10px;
-  padding: 1rem;
-  overflow: auto;
+  transition: all 0.3s ease;
 }
-.indicator{
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.active, .logout {
+  color: white;
+  background: linear-gradient(to right, #4f46e5, #6366f1);
+  font-weight: 500;
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.active:hover, .logout:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.task-container {
+  height: 90vh;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.addTask {
+  height: auto;
+  background: transparent;
+  padding: 1.5rem;
+}
+
+.outlet {
+  height: 80vh;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 1.5rem;
+  overflow: auto;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.indicator {
   display: flex;
   align-items: center;
-  height:10vh;
-  margin:auto 10px;
+  height: 10vh;
+  margin: 1rem 0.5rem;
+}
+
+/* Form styles */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+  border-color: #4f46e5 !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
+  outline: none !important;
+}
+
+/* Button styles */
+button {
+  transition: all 0.3s ease !important;
+}
+
+button:hover {
+  transform: translateY(-1px);
 }
