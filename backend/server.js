@@ -26,29 +26,65 @@ app.use(cors())
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'public')));
 
-//db config
-mongoose.connect(process.env.MONGO_URI, {
+// MongoDB connection options
+const mongoOptions = {
     useNewUrlParser: true,
-}, (err) => {
-    if (err) {
-        console.log(err)
-    } else {
-        console.log("DB Connected")
-    }
-})
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 30000, // Timeout after 30 seconds
+    socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+    connectTimeoutMS: 30000, // Give up initial connection after 30 seconds
+    keepAlive: true,
+    retryWrites: true
+};
+
+// Connect to MongoDB
+console.log("Connecting to MongoDB...");
+mongoose.connect(process.env.MONGO_URI, mongoOptions)
+    .then(() => {
+        console.log("MongoDB Connected Successfully");
+        // Only start the server after successful DB connection
+        app.listen(port, () => {
+            console.log(`Server running on port ${port}`);
+            console.log(`MongoDB connection state: ${mongoose.connection.readyState}`);
+        });
+    })
+    .catch((err) => {
+        console.error("MongoDB Connection Error:", err);
+        process.exit(1); // Exit if unable to connect to database
+    });
+
+// Monitor MongoDB connection
+mongoose.connection.on('error', err => {
+    console.error('MongoDB connection error:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+    console.log('MongoDB disconnected');
+});
+
+mongoose.connection.on('reconnected', () => {
+    console.log('MongoDB reconnected');
+});
 
 // Health check endpoint
 app.get('/health', (req, res) => {
     const healthcheck = {
         uptime: process.uptime(),
         message: 'OK',
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        mongoState: mongoose.connection.readyState // 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting
     };
     try {
-        res.status(200).send(healthcheck);
+        // Only return 200 if MongoDB is connected
+        if (mongoose.connection.readyState === 1) {
+            res.status(200).send(healthcheck);
+        } else {
+            healthcheck.message = 'Database not connected';
+            res.status(503).send(healthcheck);
+        }
     } catch (error) {
         healthcheck.message = error;
-        res.status(503).send();
+        res.status(503).send(healthcheck);
     }
 });
 
@@ -62,6 +98,3 @@ app.use("/api/forgotPassword", forgotPasswordRouter)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
-
-//listen
-app.listen(port, () => console.log(`Listening on localhost:${port}`))
