@@ -56,7 +56,16 @@ if ! command -v node &> /dev/null; then
     exit 1
 fi
 
+# Stop any existing instance of the application
+echo "Checking for existing application instance..."
+if pm2 list | grep -q "mern-todo-app"; then
+    echo "Stopping existing application instance..."
+    pm2 stop mern-todo-app
+    pm2 delete mern-todo-app
+fi
+
 # Start the application with PM2 using global path
+echo "Starting new application instance..."
 pm2 start "$APP_DIR/server.js" --name "mern-todo-app" --env production
 
 # Ensure PM2 restarts on server reboot
