@@ -3,6 +3,7 @@ os: linux
 files:
   - source: / # Copy all build artifacts from S3 root
     destination: /var/www/mern-todo-app # Destination on the EC2 instance
+    overwrite: yes
 permissions:
   - object: /var/www/mern-todo-app
     pattern: "**"
